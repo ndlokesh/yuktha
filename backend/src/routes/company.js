@@ -119,8 +119,8 @@ router.get('/students/search', authenticate, requireRole('COMPANY'), async (req,
     const { skill, institution, city, graduationYear } = req.query;
 
     const where = {};
-    if (institution) where.institution = { contains: institution, mode: 'insensitive' };
-    if (city) where.city = { contains: city, mode: 'insensitive' };
+    if (institution) where.institution = { contains: institution };
+    if (city) where.city = { contains: city };
     if (graduationYear) where.graduationYear = parseInt(graduationYear);
 
     let students = await prisma.studentProfile.findMany({

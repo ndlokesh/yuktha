@@ -17,13 +17,13 @@ router.get('/', async (req, res) => {
     }
 
     if (location) {
-      where.location = { contains: location, mode: 'insensitive' };
+      where.location = { contains: location };
     }
 
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
+        { title: { contains: search } },
+        { description: { contains: search } },
       ];
     }
 

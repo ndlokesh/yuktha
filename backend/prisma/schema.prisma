@@ -6,35 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-}
-
-// ─── Enums ────────────────────────────────────────────────────────────────────
-
-enum Role {
-  STUDENT
-  COMPANY
-  COLLEGE
-  ADMIN
-}
-
-enum JobType {
-  INTERNSHIP
-  JOB
-}
-
-enum AppStatus {
-  APPLIED
-  SHORTLISTED
-  ACCEPTED
-  REJECTED
-}
-
-enum VerificationStatus {
-  PENDING
-  VERIFIED
-  REJECTED
 }
 
 // ─── Core User ────────────────────────────────────────────────────────────────
@@ -44,7 +17,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role     @default(STUDENT)
+  role      String   @default("STUDENT") // STUDENT | COMPANY | COLLEGE | ADMIN
   isActive  Boolean  @default(false) // colleges must verify students before activation
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -120,14 +93,14 @@ model Company {
 // ─── College ──────────────────────────────────────────────────────────────────
 
 model College {
-  id                 String             @id @default(cuid())
-  userId             String             @unique
-  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name               String
   city               String
   state              String
-  affiliation        String?            // University or autonomous
-  verificationStatus VerificationStatus @default(PENDING)
+  affiliation        String?  // University or autonomous
+  verificationStatus String   @default("PENDING") // PENDING | VERIFIED | REJECTED
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -141,7 +114,7 @@ model JobListing {
   company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
   title        String
   description  String
-  type         JobType
+  type         String    @default("JOB") // INTERNSHIP | JOB
   location     String
   stipend      String?
   deadline     DateTime
@@ -166,11 +139,11 @@ model JobSkill {
 // ─── Applications ─────────────────────────────────────────────────────────────
 
 model Application {
-  id        String    @id @default(cuid())
+  id        String   @id @default(cuid())
   studentId String
   jobId     String
-  status    AppStatus @default(APPLIED)
-  note      String?   // company's note on the applicant
+  status    String   @default("APPLIED") // APPLIED | SHORTLISTED | ACCEPTED | REJECTED
+  note      String?  // company's note on the applicant
 
   student StudentProfile @relation(fields: [studentId], references: [id], onDelete: Cascade)
   job     JobListing     @relation(fields: [jobId], references: [id], onDelete: Cascade)

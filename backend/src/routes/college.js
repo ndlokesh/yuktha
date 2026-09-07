@@ -18,7 +18,7 @@ router.get('/students', authenticate, requireRole('COLLEGE', 'ADMIN'), async (re
 
     const where = {
       user: { isActive: true },
-      ...(institutionName && { institution: { contains: institutionName, mode: 'insensitive' } }),
+      ...(institutionName && { institution: { contains: institutionName } }),
       ...(graduationYear && { graduationYear: parseInt(graduationYear) }),
     };
 
@@ -56,7 +56,7 @@ router.get('/pending', authenticate, requireRole('COLLEGE', 'ADMIN'), async (req
   try {
     let institutionFilter = {};
     if (req.user.role === 'COLLEGE') {
-      institutionFilter = { institution: { contains: req.user.college?.name, mode: 'insensitive' } };
+      institutionFilter = { institution: { contains: req.user.college?.name } };
     }
 
     const pending = await prisma.studentProfile.findMany({
@@ -112,7 +112,7 @@ router.get('/analytics', authenticate, requireRole('COLLEGE', 'ADMIN'), async (r
 
     const where = {
       user: { isActive: true },
-      ...(institutionName && { institution: { contains: institutionName, mode: 'insensitive' } }),
+      ...(institutionName && { institution: { contains: institutionName } }),
       ...(graduationYear && { graduationYear: parseInt(graduationYear) }),
     };
 

@@ -80,7 +80,7 @@ router.get('/overview', authenticate, requireRole('ADMIN', 'COLLEGE'), async (re
     const collegeStats = await Promise.all(
       allColleges.map(async (college) => {
         const students = await prisma.studentProfile.findMany({
-          where: { institution: { contains: college.name, mode: 'insensitive' } },
+          where: { institution: { contains: college.name } },
           include: { applications: true },
         });
         const total = students.length;
