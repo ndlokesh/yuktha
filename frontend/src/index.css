@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  
+  body {
+    @apply font-sans text-slate-800 bg-slate-50;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  /* ── Buttons ─────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  .btn-primary {
+    @apply btn bg-ayush-primary text-white hover:bg-ayush-secondary focus:ring-ayush-primary shadow-sm hover:shadow-md;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-ayush-primary border border-ayush-primary hover:bg-ayush-light focus:ring-ayush-primary;
+  }
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-slate-600 hover:bg-slate-100 focus:ring-slate-300;
+  }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .btn-lg { @apply px-6 py-3 text-base; }
+
+  /* ── Cards ───────────────────────────────────── */
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-slate-100 p-6;
+  }
+  .card-hover {
+    @apply card hover:shadow-md hover:border-ayush-primary/20 transition-all duration-200;
+  }
+
+  /* ── Form inputs ─────────────────────────────── */
+  .input {
+    @apply w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-ayush-primary/40 focus:border-ayush-primary transition-colors bg-white placeholder-slate-400;
+  }
+  .input-error { @apply border-red-400 focus:ring-red-300; }
+  .label { @apply block text-sm font-medium text-slate-700 mb-1.5; }
+  .error-msg { @apply text-xs text-red-600 mt-1; }
+  .form-group { @apply space-y-1.5; }
+
+  /* ── Badges / Status ─────────────────────────── */
+  .badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium; }
+  .badge-blue   { @apply badge bg-blue-100 text-blue-800; }
+  .badge-amber  { @apply badge bg-amber-100 text-amber-800; }
+  .badge-green  { @apply badge bg-green-100 text-green-800; }
+  .badge-red    { @apply badge bg-red-100 text-red-800; }
+  .badge-slate  { @apply badge bg-slate-100 text-slate-700; }
+
+  /* ── Skill chips ─────────────────────────────── */
+  .skill-chip {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200;
+  }
+  .skill-chip-ayurveda   { @apply bg-emerald-50 text-emerald-800 border-emerald-200; }
+  .skill-chip-yoga       { @apply bg-teal-50 text-teal-800 border-teal-200; }
+  .skill-chip-unani      { @apply bg-blue-50 text-blue-800 border-blue-200; }
+  .skill-chip-siddha     { @apply bg-purple-50 text-purple-800 border-purple-200; }
+  .skill-chip-homeopathy { @apply bg-pink-50 text-pink-800 border-pink-200; }
+  .skill-chip-research   { @apply bg-amber-50 text-amber-800 border-amber-200; }
+
+  /* ── Skeleton loader ─────────────────────────── */
+  .skeleton {
+    @apply bg-slate-200 animate-pulse rounded;
+  }
+
+  /* ── Section headers ─────────────────────────── */
+  .section-title {
+    @apply text-2xl font-bold font-display text-ayush-dark;
+  }
+  .section-subtitle {
+    @apply text-sm text-slate-500 mt-1;
+  }
+
+  /* ── Stat cards ──────────────────────────────── */
+  .stat-card {
+    @apply card flex items-start gap-4;
+  }
+  .stat-icon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center text-white text-xl flex-shrink-0;
+  }
+  .stat-value { @apply text-3xl font-bold font-display text-ayush-dark; }
+  .stat-label { @apply text-sm text-slate-500 mt-0.5; }
+}
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { @apply bg-transparent; }
+::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }
