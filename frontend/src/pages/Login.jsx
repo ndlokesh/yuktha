@@ -2,12 +2,28 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import toast from 'react-hot-toast'
+import {
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ArrowLeft,
+  GraduationCap,
+  Building2,
+  Landmark,
+  ShieldCheck,
+  Sparkles,
+  AlertCircle,
+  Zap,
+} from 'lucide-react'
 
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
 
   const handleSubmit = async (e) => {
@@ -19,7 +35,7 @@ export default function Login() {
       toast.success(`Welcome back, ${user.name}!`)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Please try again.')
+      setError(err.response?.data?.error || 'Authentication failed. Please verify your credentials.')
     } finally {
       setLoading(false)
     }
@@ -32,85 +48,157 @@ export default function Login() {
       college: { email: 'college@ayushportal.demo', password: 'Demo@1234' },
     }
     setForm(demos[role])
+    toast.success(`Loaded ${role} demo credentials`)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ayush-dark to-ayush-primary flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+      {/* Background ambient light effects */}
+      <div className="absolute top-0 left-1/3 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 right-1/3 w-96 h-96 bg-teal-500/15 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Tricolor top indicator */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF9933] via-[#FFFFFF] to-[#138808] z-50" />
+
+      <div className="relative max-w-md mx-auto w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm mb-6">
-            ← Back to home
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 border border-white/10 hover:text-white transition-all mb-6 group cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+            <span>Back to Portal Home</span>
           </Link>
-          <div className="text-5xl mb-3">🌿</div>
-          <h1 className="font-display font-bold text-2xl text-white">Sign In to Ayush Portal</h1>
-          <p className="text-white/60 text-sm mt-2">Ministry of Ayush — Academia-Industry Platform</p>
+
+          <div className="flex justify-center mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-semibold tracking-wide">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Ministry of Ayush · SIH26044</span>
+            </div>
+          </div>
+
+          <h1 className="font-display text-3xl font-extrabold text-white tracking-tight">
+            Portal Sign In
+          </h1>
+          <p className="mt-2 text-sm text-slate-400">
+            Access your Ayush academic & placement workspace
+          </p>
         </div>
 
-        <div className="card">
-          {/* Demo quick-fill */}
-          <div className="mb-6 p-3 bg-ayush-light rounded-lg border border-ayush-primary/20">
-            <p className="text-xs font-medium text-ayush-primary mb-2">Quick demo login:</p>
-            <div className="flex flex-wrap gap-2">
-              {['student', 'company', 'college'].map((role) => (
-                <button
-                  key={role}
-                  type="button"
-                  onClick={() => fillDemo(role)}
-                  className="px-2.5 py-1 rounded-md text-xs font-medium bg-ayush-primary/10 text-ayush-primary hover:bg-ayush-primary/20 transition-colors capitalize"
-                >
-                  {role}
-                </button>
-              ))}
+        {/* Card */}
+        <div className="bg-white/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/40 border border-white/40">
+          {/* 1-Click Demo Logins */}
+          <div className="mb-6 p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/80">
+            <div className="flex items-center justify-between mb-2.5">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+                <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                <span>1-Click Demo Evaluation Login:</span>
+              </span>
+              <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-100/70 px-2 py-0.5 rounded-full">
+                All pre-seeded
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { key: 'student', label: 'Student', icon: GraduationCap },
+                { key: 'company', label: 'Company', icon: Building2 },
+                { key: 'college', label: 'College', icon: Landmark },
+              ].map((d) => {
+                const Icon = d.icon
+                return (
+                  <button
+                    key={d.key}
+                    type="button"
+                    onClick={() => fillDemo(d.key)}
+                    className="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-xl bg-white hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-semibold border border-emerald-200/90 shadow-2xs hover:shadow-sm hover:border-emerald-600 transition-all cursor-pointer group"
+                  >
+                    <Icon className="w-4 h-4 text-emerald-600 group-hover:text-white transition-colors" />
+                    <span>{d.label}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="label">Email Address</label>
-              <input
-                type="email"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="input"
-                placeholder="you@example.com"
-              />
+              <label className="label">Registered Email</label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className="input pl-10"
+                  placeholder="name@ayushportal.demo"
+                />
+              </div>
             </div>
+
             <div>
-              <label className="label">Password</label>
-              <input
-                type="password"
-                required
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="input"
-                placeholder="••••••••"
-              />
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="label mb-0">Password</label>
+              </div>
+              <div className="relative">
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  className="input pl-10 pr-10"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3">
-                {error}
+              <div className="bg-red-50 border border-red-200 text-red-700 text-xs font-medium rounded-xl p-3.5 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                <span>{error}</span>
               </div>
             )}
 
-            <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-2.5 text-base mt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary w-full py-3.5 text-base font-semibold shadow-lg shadow-emerald-900/25 hover:shadow-xl hover:shadow-emerald-900/35 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer mt-4"
+            >
               {loading ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Signing in...
+                  Authenticating...
                 </span>
-              ) : 'Sign In →'}
+              ) : (
+                <>
+                  <span>Sign In to Portal</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-ayush-primary font-medium hover:underline">
-              Register free
-            </Link>
-          </p>
+          <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <div>
+              New to Ayush Portal?{' '}
+              <Link to="/register" className="text-emerald-700 font-bold hover:underline">
+                Register Free
+              </Link>
+            </div>
+            <div className="inline-flex items-center gap-1 text-slate-400">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span>SSL 256-bit</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

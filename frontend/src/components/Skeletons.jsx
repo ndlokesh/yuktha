@@ -1,3 +1,5 @@
+import { Inbox } from 'lucide-react'
+
 export function CardSkeleton({ lines = 3 }) {
   return (
     <div className="card animate-pulse space-y-3">
@@ -37,12 +39,18 @@ export function TableRowSkeleton({ cols = 4 }) {
   )
 }
 
-export function EmptyState({ icon = '📭', title = 'Nothing here yet', description = '' }) {
+export function EmptyState({ icon, title = 'Nothing here yet', description = '' }) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="text-5xl mb-4">{icon}</div>
-      <h3 className="text-lg font-semibold text-slate-700 mb-2">{title}</h3>
-      {description && <p className="text-sm text-slate-500 max-w-xs">{description}</p>}
+    <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+      <div className="w-16 h-16 rounded-2xl bg-emerald-50/80 border border-emerald-200/60 flex items-center justify-center mb-4 text-emerald-700 shadow-inner">
+        {icon && typeof icon !== 'string' ? (
+          icon
+        ) : (
+          <Inbox className="w-8 h-8 text-emerald-600/80" />
+        )}
+      </div>
+      <h3 className="font-display font-bold text-slate-800 text-base mb-1">{title}</h3>
+      {description && <p className="text-xs text-slate-500 max-w-sm leading-relaxed">{description}</p>}
     </div>
   )
 }
