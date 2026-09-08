@@ -87,6 +87,25 @@ app.use((err, req, res, next) => {
   });
 });
 
+// ─── Auto-seed check on startup ──────────────────────────────────────────────
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+async function autoSeedIfEmpty() {
+  try {
+    const count = await prisma.user.count();
+    if (count === 0) {
+      console.log('🌱 No users found in database. Auto-seeding default demo accounts...');
+      const { execSync } = require('child_process');
+      execSync('node prisma/seed.js', { cwd: path.join(__dirname, '..'), stdio: 'inherit' });
+      console.log('✅ Auto-seed completed successfully.');
+    }
+  } catch (err) {
+    console.warn('⚠️ Auto-seed notice:', err.message);
+  }
+}
+autoSeedIfEmpty();
+
 app.listen(PORT, () => {
   console.log(`🚀 Ayush Portal API running on port ${PORT}`);
   console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);

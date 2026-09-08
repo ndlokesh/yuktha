@@ -4,7 +4,7 @@
   "description": "Yuktha - Unified Academia-Industry Collaboration & Skill Intelligence Platform (SIH26044)",
   "scripts": {
     "build": "npm --prefix frontend run build",
-    "render-build": "cd frontend && npm install --include=dev && npm run build && cd ../backend && npm install --include=dev && npx prisma generate && npx prisma db push",
+    "render-build": "cd frontend && npm install --include=dev && npm run build && cd ../backend && npm install --include=dev && npx prisma generate && npx prisma db push && node prisma/seed.js",
     "start": "node backend/src/index.js",
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix frontend run dev"

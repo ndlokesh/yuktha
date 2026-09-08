@@ -84,9 +84,10 @@ router.post('/register', async (req, res) => {
       include: { student: true, faculty: true, company: true, college: true },
     });
 
+    const secret = process.env.JWT_SECRET || 'ayush_sih_2026_super_secret_key_yuktha';
     const token = jwt.sign(
       { id: user.id, role: user.role },
-      process.env.JWT_SECRET,
+      secret,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
 
@@ -114,15 +115,29 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email },
+    const cleanEmail = email.trim().toLowerCase();
+
+    // Try direct match first, then fallback to case-insensitive findFirst
+    let user = await prisma.user.findFirst({
+      where: { email: cleanEmail },
       include: { student: true, faculty: true, company: true, college: true },
     });
 
-    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+    if (!user) {
+      const allUsers = await prisma.user.findMany({
+        include: { student: true, faculty: true, company: true, college: true },
+      });
+      user = allUsers.find((u) => u.email.trim().toLowerCase() === cleanEmail);
+    }
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password. Please verify your credentials.' });
+    }
 
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+    if (!valid) {
+      return res.status(401).json({ error: 'Invalid email or password. Please verify your credentials.' });
+    }
 
     if (!user.isActive) {
       return res.status(403).json({
@@ -130,9 +145,10 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    const secret = process.env.JWT_SECRET || 'ayush_sih_2026_super_secret_key_yuktha';
     const token = jwt.sign(
       { id: user.id, role: user.role },
-      process.env.JWT_SECRET,
+      secret,
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
 
@@ -141,7 +157,7 @@ router.post('/login', async (req, res) => {
     res.json({ user: userWithoutPassword, token });
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ error: 'Login failed' });
+    res.status(500).json({ error: 'Login service encountered an issue. Please try again.' });
   }
 });
 
