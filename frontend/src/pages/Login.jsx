@@ -44,8 +44,10 @@ export default function Login() {
   const fillDemo = (role) => {
     const demos = {
       student: { email: 'student@ayushportal.demo', password: 'Demo@1234' },
+      faculty: { email: 'faculty@ayushportal.demo', password: 'Demo@1234' },
       company: { email: 'company@ayushportal.demo', password: 'Demo@1234' },
       college: { email: 'college@ayushportal.demo', password: 'Demo@1234' },
+      admin: { email: 'admin@ayushportal.demo', password: 'Demo@1234' },
     }
     setForm(demos[role])
     toast.success(`Loaded ${role} demo credentials`)
@@ -71,39 +73,36 @@ export default function Login() {
             <span>Back to Portal Home</span>
           </Link>
 
-          <div className="flex justify-center mb-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-semibold tracking-wide">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Ministry of Ayush · SIH26044</span>
+          <div className="flex items-center justify-center gap-2.5 mb-3">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-900/40">
+              Y
             </div>
+            <span className="font-display font-black text-2xl tracking-tight text-white">Yuktha</span>
           </div>
-
-          <h1 className="font-display text-3xl font-extrabold text-white tracking-tight">
-            Portal Sign In
-          </h1>
-          <p className="mt-2 text-sm text-slate-400">
-            Access your Ayush academic & placement workspace
-          </p>
+          <h2 className="text-xl font-bold text-white tracking-tight">Academia–Industry Collaboration Portal</h2>
+          <p className="text-xs text-slate-400 mt-1">Sign in to your verified institutional or corporate account</p>
         </div>
 
         {/* Card */}
         <div className="bg-white/95 backdrop-blur-2xl rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/40 border border-white/40">
           {/* 1-Click Demo Logins */}
-          <div className="mb-6 p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/80">
-            <div className="flex items-center justify-between mb-2.5">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+          <div className="mb-6 p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-950 flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                <span>1-Click Demo Evaluation Login:</span>
+                <span>1-Click Demo Logins:</span>
               </span>
               <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-100/70 px-2 py-0.5 rounded-full">
-                All pre-seeded
+                Pre-seeded
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-5 gap-1.5">
               {[
                 { key: 'student', label: 'Student', icon: GraduationCap },
-                { key: 'company', label: 'Company', icon: Building2 },
+                { key: 'faculty', label: 'Faculty', icon: Landmark },
+                { key: 'company', label: 'Industry', icon: Building2 },
                 { key: 'college', label: 'College', icon: Landmark },
+                { key: 'admin', label: 'Admin', icon: ShieldCheck },
               ].map((d) => {
                 const Icon = d.icon
                 return (
@@ -111,9 +110,9 @@ export default function Login() {
                     key={d.key}
                     type="button"
                     onClick={() => fillDemo(d.key)}
-                    className="flex flex-col items-center justify-center gap-1 py-2 px-1 rounded-xl bg-white hover:bg-emerald-600 hover:text-white text-slate-700 text-xs font-semibold border border-emerald-200/90 shadow-2xs hover:shadow-sm hover:border-emerald-600 transition-all cursor-pointer group"
+                    className="flex flex-col items-center justify-center gap-1 py-2 px-0.5 rounded-xl bg-white hover:bg-emerald-600 hover:text-white text-slate-700 text-[11px] font-semibold border border-emerald-200/90 shadow-2xs hover:shadow-sm hover:border-emerald-600 transition-all cursor-pointer group"
                   >
-                    <Icon className="w-4 h-4 text-emerald-600 group-hover:text-white transition-colors" />
+                    <Icon className="w-3.5 h-3.5 text-emerald-600 group-hover:text-white transition-colors" />
                     <span>{d.label}</span>
                   </button>
                 )

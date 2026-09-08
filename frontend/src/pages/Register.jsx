@@ -101,9 +101,17 @@ export default function Register() {
       activeBorder: 'border-emerald-600 bg-emerald-50/70 text-emerald-950 shadow-md shadow-emerald-900/10',
     },
     {
+      value: 'FACULTY',
+      icon: Landmark,
+      title: 'Academician / Faculty',
+      desc: 'Internships, FDPs & research',
+      badgeColor: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
+      activeBorder: 'border-cyan-600 bg-cyan-50/70 text-cyan-950 shadow-md shadow-cyan-900/10',
+    },
+    {
       value: 'COMPANY',
       icon: Building2,
-      title: 'Ayush Industry',
+      title: 'Industry / Company',
       desc: 'Post jobs & recruit talent',
       badgeColor: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
       activeBorder: 'border-blue-600 bg-blue-50/70 text-blue-950 shadow-md shadow-blue-900/10',
@@ -112,7 +120,7 @@ export default function Register() {
       value: 'COLLEGE',
       icon: Landmark,
       title: 'Institution / College',
-      desc: 'Verify students & track placements',
+      desc: 'Verify & track placements',
       badgeColor: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
       activeBorder: 'border-purple-600 bg-purple-50/70 text-purple-950 shadow-md shadow-purple-900/10',
     },
@@ -359,6 +367,70 @@ export default function Register() {
                   <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
                   <div>
                     <span className="font-bold">Institutional Verification Protocol:</span> Student accounts are verified by your college placement authority before full job applications go live.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {role === 'FACULTY' && (
+              <div className="pt-2 border-t border-slate-100 space-y-4">
+                <div>
+                  <label className="label">University / Institution *</label>
+                  <div className="relative">
+                    <Landmark className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <input
+                      className="input pl-10"
+                      required
+                      value={form.institution}
+                      onChange={set('institution')}
+                      placeholder="e.g. Gujarat Ayurved University"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="label">Department *</label>
+                    <input
+                      className="input"
+                      required
+                      value={form.department || ''}
+                      onChange={set('department')}
+                      placeholder="e.g. Clinical Pharmacology"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Designation *</label>
+                    <input
+                      className="input"
+                      required
+                      value={form.designation || ''}
+                      onChange={set('designation')}
+                      placeholder="e.g. Professor / Associate Professor"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="label">Qualifications *</label>
+                    <input
+                      className="input"
+                      required
+                      value={form.qualifications || ''}
+                      onChange={set('qualifications')}
+                      placeholder="e.g. Ph.D, MD, MS"
+                    />
+                  </div>
+                  <div>
+                    <label className="label">Specialization Areas *</label>
+                    <input
+                      className="input"
+                      required
+                      value={form.specializations || ''}
+                      onChange={set('specializations')}
+                      placeholder="e.g. Phytopharmacy, Clinical Trials"
+                    />
                   </div>
                 </div>
               </div>

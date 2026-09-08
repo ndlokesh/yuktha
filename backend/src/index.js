@@ -11,6 +11,11 @@ const applicationRoutes = require('./routes/applications');
 const companyRoutes = require('./routes/company');
 const collegeRoutes = require('./routes/college');
 const analyticsRoutes = require('./routes/analytics');
+const assessmentRoutes = require('./routes/assessments');
+const learningRoutes = require('./routes/learning');
+const collaborationRoutes = require('./routes/collaboration');
+const facultyRoutes = require('./routes/faculty');
+const portfolioRoutes = require('./routes/portfolio');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -38,6 +43,11 @@ app.use('/api/apply', applicationRoutes);
 app.use('/api/company', companyRoutes);
 app.use('/api/college', collegeRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/assessments', assessmentRoutes);
+app.use('/api/learning', learningRoutes);
+app.use('/api/collaboration', collaborationRoutes);
+app.use('/api/faculty', facultyRoutes);
+app.use('/api/portfolio', portfolioRoutes);
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 

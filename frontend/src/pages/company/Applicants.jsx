@@ -272,18 +272,29 @@ export default function Applicants() {
                               {app.student.city}, {app.student.state}
                             </div>
 
-                            {app.student.resumeUrl && (
-                              <a
-                                href={app.student.resumeUrl}
+                            <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                              {app.student.resumeUrl && (
+                                <a
+                                  href={app.student.resumeUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 transition-colors"
+                                >
+                                  <FileText className="w-3 h-3" />
+                                  <span>Verified Resume</span>
+                                  <ExternalLink className="w-2.5 h-2.5" />
+                                </a>
+                              )}
+                              <Link
+                                to={`/portfolio/${app.student.id}`}
                                 target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 mt-1.5 transition-colors"
+                                className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 hover:text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200/60 transition-colors"
                               >
-                                <FileText className="w-3 h-3" />
-                                <span>View Verified Resume</span>
+                                <Sparkles className="w-3 h-3 text-blue-600" />
+                                <span>Digital Portfolio</span>
                                 <ExternalLink className="w-2.5 h-2.5" />
-                              </a>
-                            )}
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </td>

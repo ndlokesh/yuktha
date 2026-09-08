@@ -8,12 +8,21 @@ const prisma = new PrismaClient();
 // GET /api/jobs — list jobs with filters
 router.get('/', async (req, res) => {
   try {
-    const { skill, location, type, search } = req.query;
+    const { skill, location, type, workMode, experienceLevel, search } = req.query;
 
     const where = { isActive: true };
 
-    if (type && (type === 'INTERNSHIP' || type === 'JOB')) {
-      where.type = type;
+    const validTypes = ['INTERNSHIP', 'JOB', 'APPRENTICESHIP', 'LIVE_PROJECT'];
+    if (type && validTypes.includes(type.toUpperCase())) {
+      where.type = type.toUpperCase();
+    }
+
+    if (workMode) {
+      where.workMode = workMode.toUpperCase();
+    }
+
+    if (experienceLevel) {
+      where.experienceLevel = experienceLevel.toUpperCase();
     }
 
     if (location) {

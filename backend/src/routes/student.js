@@ -27,8 +27,8 @@ router.get('/profile', authenticate, requireRole('STUDENT'), async (req, res) =>
 router.put('/profile', authenticate, requireRole('STUDENT'), async (req, res) => {
   try {
     const {
-      institution, degree, graduationYear, city, state,
-      linkedinUrl, achievements, bio, name,
+      institution, degree, department, graduationYear, cgpa, targetRole,
+      city, state, linkedinUrl, githubUrl, portfolioUrl, achievements, bio, name,
     } = req.body;
 
     // Update user name if provided
@@ -41,10 +41,15 @@ router.put('/profile', authenticate, requireRole('STUDENT'), async (req, res) =>
       data: {
         ...(institution !== undefined && { institution }),
         ...(degree !== undefined && { degree }),
+        ...(department !== undefined && { department }),
         ...(graduationYear !== undefined && { graduationYear: parseInt(graduationYear) }),
+        ...(cgpa !== undefined && { cgpa: parseFloat(cgpa) }),
+        ...(targetRole !== undefined && { targetRole }),
         ...(city !== undefined && { city }),
         ...(state !== undefined && { state }),
         ...(linkedinUrl !== undefined && { linkedinUrl }),
+        ...(githubUrl !== undefined && { githubUrl }),
+        ...(portfolioUrl !== undefined && { portfolioUrl }),
         ...(achievements !== undefined && { achievements }),
         ...(bio !== undefined && { bio }),
       },
@@ -144,6 +149,9 @@ router.get('/applications', authenticate, requireRole('STUDENT'), async (req, re
             company: true,
             skills: { include: { skill: true } },
           },
+        },
+        milestones: {
+          orderBy: { weekNumber: 'asc' },
         },
       },
       orderBy: { appliedAt: 'desc' },

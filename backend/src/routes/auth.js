@@ -15,9 +15,9 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Name, email, password and role are required' });
     }
 
-    const validRoles = ['STUDENT', 'COMPANY', 'COLLEGE'];
+    const validRoles = ['STUDENT', 'FACULTY', 'COMPANY', 'COLLEGE'];
     if (!validRoles.includes(role)) {
-      return res.status(400).json({ error: 'Invalid role. Must be STUDENT, COMPANY or COLLEGE' });
+      return res.status(400).json({ error: 'Invalid role. Must be STUDENT, FACULTY, COMPANY or COLLEGE' });
     }
 
     const existing = await prisma.user.findUnique({ where: { email } });
@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    // Students need verification by college, companies/colleges are active by default
+    // Students and Faculty need verification by college/admin, companies/colleges are active by default
     const isActive = role !== 'STUDENT';
 
     let userData = {
@@ -45,6 +45,19 @@ router.post('/register', async (req, res) => {
           graduationYear: parseInt(req.body.graduationYear) || new Date().getFullYear() + 1,
           city: city || '',
           state: state || '',
+          targetRole: req.body.targetRole || '',
+        },
+      };
+    } else if (role === 'FACULTY') {
+      userData.faculty = {
+        create: {
+          institution: institution || '',
+          department: req.body.department || 'Academic Department',
+          designation: req.body.designation || 'Assistant Professor',
+          qualifications: req.body.qualifications || 'Ph.D / Post-Graduate',
+          experienceYears: parseInt(req.body.experienceYears) || 3,
+          specializations: req.body.specializations || 'Research & Teaching',
+          researchInterests: req.body.researchInterests || '',
         },
       };
     } else if (role === 'COMPANY') {
@@ -68,7 +81,7 @@ router.post('/register', async (req, res) => {
 
     const user = await prisma.user.create({
       data: userData,
-      include: { student: true, company: true, college: true },
+      include: { student: true, faculty: true, company: true, college: true },
     });
 
     const token = jwt.sign(
@@ -103,7 +116,7 @@ router.post('/login', async (req, res) => {
 
     const user = await prisma.user.findUnique({
       where: { email },
-      include: { student: true, company: true, college: true },
+      include: { student: true, faculty: true, company: true, college: true },
     });
 
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
