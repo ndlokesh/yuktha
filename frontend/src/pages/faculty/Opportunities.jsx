@@ -103,6 +103,8 @@ export default function FacultyOpportunities() {
           <div className="relative w-full md:w-80">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
+              id="opp-search"
+              name="opp-search"
               type="text"
               placeholder="Search by research topic, domain, or company..."
               value={searchQuery}
@@ -113,6 +115,8 @@ export default function FacultyOpportunities() {
 
           <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
             <select
+              id="opp-type-filter"
+              name="opp-type-filter"
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
               className="px-3 py-2 rounded-xl bg-slate-950 border border-white/10 text-xs text-slate-300 focus:border-cyan-500 outline-none"
@@ -232,6 +236,8 @@ export default function FacultyOpportunities() {
                     Proposal / Letter of Intent *
                   </label>
                   <textarea
+                    id="opp-proposal"
+                    name="opp-proposal"
                     required
                     rows={4}
                     placeholder="Outline your research focus, relevant publications, lab infrastructure readiness, and proposed outcomes..."
@@ -242,10 +248,12 @@ export default function FacultyOpportunities() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                  <label htmlFor="opp-document-url" className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Supporting Document / Full Project PDF URL (Optional)
                   </label>
                   <input
+                    id="opp-document-url"
+                    name="opp-document-url"
                     type="url"
                     placeholder="https://drive.google.com/... or cloud document link"
                     value={proposalForm.documentUrl}
