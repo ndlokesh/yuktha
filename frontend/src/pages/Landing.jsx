@@ -128,16 +128,31 @@ export default function Landing() {
   const { user } = useAuth()
   const [selectedSystem, setSelectedSystem] = useState('All Systems')
 
-  if (user) return <Navigate to="/dashboard" replace />
-
   const filteredSkills =
     selectedSystem === 'All Systems'
       ? allSkills
       : allSkills.filter((s) => s.system === selectedSystem)
 
   return (
-    <div className="min-h-screen bg-[#f8faf9] text-slate-800">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
+
+      {/* Floating Active Session Banner */}
+      {user && (
+        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 border-b border-emerald-500/20 px-4 py-2.5 text-center text-xs flex items-center justify-center gap-3">
+          <span className="inline-flex items-center gap-1.5 text-emerald-300 font-medium">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Signed in as <strong>{user.name}</strong> ({user.role})
+          </span>
+          <Link
+            to="/dashboard"
+            className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-200 text-xs font-bold border border-emerald-500/30 transition-colors"
+          >
+            <span>Open {user.role.charAt(0) + user.role.slice(1).toLowerCase()} Dashboard</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      )}
 
       {/* ── Hero Section ────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-[#062419] to-slate-950 text-white py-20 lg:py-28">
@@ -154,7 +169,7 @@ export default function Landing() {
                 <span>Smart India Hackathon 2026 · Problem SIH26044</span>
               </div>
 
-              <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.1]">
+              <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.1] text-white">
                 Where Ayush Expertise Meets{' '}
                 <span className="bg-gradient-to-r from-amber-400 via-emerald-300 to-teal-200 bg-clip-text text-transparent">
                   National Opportunity
@@ -270,16 +285,16 @@ export default function Landing() {
             return (
               <div
                 key={s.label}
-                className="bg-white rounded-2xl p-5 shadow-lg shadow-slate-900/5 border border-slate-200/80 flex items-center gap-4 hover:border-emerald-500/40 transition-all group"
+                className="bg-slate-900/90 backdrop-blur-xl rounded-2xl p-5 shadow-xl border border-white/10 flex items-center gap-4 hover:border-emerald-500/40 hover:-translate-y-0.5 transition-all group"
               >
-                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 group-hover:scale-105 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="font-display font-black text-2xl text-slate-900 leading-tight">
+                  <div className="font-display font-black text-2xl text-white leading-tight">
                     {s.value}
                   </div>
-                  <div className="text-xs font-bold text-slate-700 leading-tight">{s.label}</div>
+                  <div className="text-xs font-bold text-slate-200 leading-tight">{s.label}</div>
                   <div className="text-[11px] text-slate-400 leading-tight mt-0.5">{s.desc}</div>
                 </div>
               </div>
@@ -289,18 +304,20 @@ export default function Landing() {
       </section>
 
       {/* ── Ayush Skill Taxonomy Showcase ───────────────────────────── */}
-      <section className="py-20 lg:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 lg:py-24 relative overflow-hidden">
+        <div className="absolute top-1/2 left-0 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100/70 text-emerald-800 text-xs font-bold tracking-wide uppercase mb-3">
-              Core Innovation
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold tracking-wide uppercase mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Core Innovation</span>
             </div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
-              A Native Ayush Skill Taxonomy
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+              Standardized Competency Taxonomy
             </h2>
-            <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
-              Standard job boards categorize Ayush as generic 'Healthcare'. Our portal has a 46+ skill
-              ontology spanning Ayurveda, Yoga, Unani, Siddha, Homeopathy, and modern Ayush clinical trials.
+            <p className="mt-3 text-slate-400 text-sm sm:text-base leading-relaxed">
+              Standard job portals treat Ayush as generic 'Healthcare'. Yuktha introduces a comprehensive 46+ skill
+              ontology spanning classical systems, modern clinical research protocols, and data-driven pharmacology.
             </p>
 
             {/* Filter pills */}
@@ -311,8 +328,8 @@ export default function Landing() {
                   onClick={() => setSelectedSystem(sys)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     selectedSystem === sys
-                      ? 'bg-emerald-700 text-white shadow-sm'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900'
+                      ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-950/40 border border-emerald-500/40'
+                      : 'bg-slate-900/80 text-slate-400 border border-white/10 hover:bg-slate-800 hover:text-white'
                   }`}
                 >
                   {sys}
@@ -322,7 +339,7 @@ export default function Landing() {
           </div>
 
           {/* Skill Tag Cloud */}
-          <div className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm">
+          <div className="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
             <div className="flex flex-wrap gap-2.5 justify-center">
               {filteredSkills.map((s) => (
                 <SkillTag key={s.name} name={s.name} system={s.system} />
@@ -332,57 +349,62 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Three Stakeholders Section ─────────────────────────────── */}
-      <section className="py-20 bg-slate-100/60 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── Four Stakeholders Section ─────────────────────────────── */}
+      <section className="py-20 lg:py-24 bg-gradient-to-b from-slate-900/60 via-slate-950 to-slate-950 border-y border-white/10 relative overflow-hidden">
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-bold tracking-wide uppercase mb-3">
-              Complete Ecosystem
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-bold tracking-wide uppercase mb-3">
+              <span>Complete Ecosystem</span>
             </div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
-              One Unified Portal. Three Critical Roles.
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
+              One Unified Portal. Four Key Pillars.
             </h2>
-            <p className="mt-2 text-slate-600 text-sm sm:text-base">
-              Connecting academic verification with enterprise hiring and scholar aspirations.
+            <p className="mt-2 text-slate-400 text-sm sm:text-base">
+              Synchronizing students, academic faculty, corporate enterprises, and institutions.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {roles.map((r) => {
               const Icon = r.icon
               return (
                 <div
                   key={r.title}
-                  className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                  className="bg-slate-900/80 rounded-3xl overflow-hidden border border-white/10 shadow-xl hover:border-emerald-500/30 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
                 >
                   {/* Card Header */}
-                  <div className={`p-8 bg-gradient-to-br ${r.gradient} text-white`}>
-                    <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center mb-4 text-white">
-                      <Icon className="w-6 h-6" />
+                  <div>
+                    <div className={`p-6 bg-gradient-to-br ${r.gradient} text-white`}>
+                      <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center mb-3 text-white shadow-sm">
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest bg-white/20 px-2.5 py-0.5 rounded-full">
+                        {r.roleTag}
+                      </span>
+                      <h3 className="font-display font-bold text-lg mt-2 tracking-tight">{r.title}</h3>
                     </div>
-                    <span className="text-[10px] font-extrabold uppercase tracking-widest bg-white/20 px-2.5 py-0.5 rounded-full">
-                      {r.roleTag}
-                    </span>
-                    <h3 className="font-display font-bold text-xl mt-2 tracking-tight">{r.title}</h3>
+
+                    {/* Card Body */}
+                    <div className="p-6">
+                      <ul className="space-y-3 mb-6">
+                        {r.points.map((p) => (
+                          <li key={p} className="flex items-start gap-2.5 text-xs text-slate-300 leading-relaxed">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                            <span>{p}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
 
-                  {/* Card Body */}
-                  <div className="p-8 flex-1 flex flex-col justify-between">
-                    <ul className="space-y-3.5 mb-8">
-                      {r.points.map((p) => (
-                        <li key={p} className="flex items-start gap-3 text-xs text-slate-600 leading-relaxed">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                          <span>{p}</span>
-                        </li>
-                      ))}
-                    </ul>
-
+                  <div className="p-6 pt-0">
                     <Link
                       to={r.href}
-                      className="btn-secondary w-full justify-center py-3 text-xs font-bold rounded-xl flex items-center gap-2 group hover:border-emerald-600 hover:text-emerald-700 cursor-pointer"
+                      className="w-full py-2.5 px-4 text-xs font-bold rounded-xl flex items-center justify-center gap-2 bg-white/10 hover:bg-white/15 text-white border border-white/10 shadow-sm transition-all group cursor-pointer"
                     >
                       <span>{r.cta}</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-emerald-400" />
                     </Link>
                   </div>
                 </div>
@@ -393,14 +415,14 @@ export default function Landing() {
       </section>
 
       {/* ── 4-Step Flow ────────────────────────────────────────────── */}
-      <section className="py-20 lg:py-28">
+      <section className="py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 tracking-tight">
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
               How the Collaboration Loop Works
             </h2>
-            <p className="mt-2 text-slate-600 text-sm sm:text-base">
-              From academic enrollment to verified placement in 4 transparent stages
+            <p className="mt-2 text-slate-400 text-sm sm:text-base">
+              From diagnostic assessment to verifiable credentials in 4 transparent stages
             </p>
           </div>
 
@@ -409,45 +431,45 @@ export default function Landing() {
               {
                 step: '01',
                 icon: GraduationCap,
-                title: 'Register & Verify',
-                desc: 'Student registers with college details. College verifies student credentials to activate account.',
+                title: 'Evaluate & Diagnose',
+                desc: 'Students take standardized industry questionnaires. The engine produces dynamic radar charts vs. 75% benchmarks.',
               },
               {
                 step: '02',
                 icon: Award,
-                title: 'Map Ayush Skills',
-                desc: 'Pick verified skills from the 46+ taxonomy. Companies configure required skills per opening.',
+                title: 'Bridge Skill Gaps',
+                desc: 'Enroll in company-published certifications and masterclasses to address identified technical & soft skill gaps.',
               },
               {
                 step: '03',
                 icon: Sparkles,
-                title: 'Algorithm Match',
-                desc: 'Our engine calculates real-time overlap score. Best matched candidates prioritized for interviews.',
+                title: 'Faculty & Industry R&D',
+                desc: 'Academicians take on corporate sabbaticals, joint research grants, and expert consultancy RFPs.',
               },
               {
                 step: '04',
                 icon: FileCheck,
-                title: 'Placement & Analytics',
-                desc: '1-click apply, live candidate status tracking, and national placement analytics for the Ministry.',
+                title: 'Verified Placement',
+                desc: 'Showcase digital portfolios with milestone feedback, mentor ratings, and institutional transcript verification.',
               },
             ].map((step) => {
               const Icon = step.icon
               return (
                 <div
                   key={step.step}
-                  className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md transition-all relative overflow-hidden"
+                  className="bg-slate-900/80 rounded-3xl p-6 border border-white/10 shadow-xl hover:border-emerald-500/40 hover:-translate-y-1 transition-all relative overflow-hidden group"
                 >
-                  <div className="text-4xl font-display font-black text-slate-100 absolute top-4 right-4 select-none">
+                  <div className="text-4xl font-display font-black text-slate-800/80 absolute top-4 right-4 select-none group-hover:text-emerald-500/20 transition-colors">
                     {step.step}
                   </div>
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-5">
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-5">
                     <Icon className="w-6 h-6" />
                   </div>
-                  <div className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider mb-1">
+                  <div className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
                     Stage {step.step}
                   </div>
-                  <h3 className="font-bold text-base text-slate-900 mb-2">{step.title}</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">{step.desc}</p>
+                  <h3 className="font-bold text-base text-white mb-2">{step.title}</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">{step.desc}</p>
                 </div>
               )
             })}
@@ -455,61 +477,72 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Ministry Bottom CTA ────────────────────────────────────── */}
-      <section className="bg-gradient-to-br from-slate-950 via-[#062419] to-slate-950 text-white py-20 relative overflow-hidden">
+      {/* ── Instant Evaluation Personas CTA Strip ───────────────────── */}
+      <section className="bg-gradient-to-br from-slate-950 via-[#062419] to-slate-950 text-white py-20 relative overflow-hidden border-t border-white/10">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-emerald-300">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-emerald-300">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Digital India Initiative · Ministry of Ayush</span>
+            <span>Turnkey Evaluation Platform · Smart India Hackathon 2026</span>
           </div>
 
           <h2 className="font-display font-extrabold text-3xl sm:text-5xl tracking-tight">
-            Accelerate Your Ayush Career Today
+            Instant 1-Click Persona Test-Drive
           </h2>
 
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Whether you are a scholar looking for clinical internships, an Ayurveda manufacturer
-            seeking R&D specialists, or a college administrator tracking placements — get started now.
+            Yuktha is fully pre-seeded with realistic data across students, research professors, pharmaceutical enterprises, and colleges.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+          {/* Direct Persona Launch Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-4">
+            {[
+              { role: 'Student', name: 'Priya Sharma', icon: '🎓', path: '/login?demo=student', color: 'hover:border-emerald-500/50 hover:bg-emerald-500/10' },
+              { role: 'Faculty', name: 'Dr. Rajeshwari', icon: '🔬', path: '/login?demo=faculty', color: 'hover:border-cyan-500/50 hover:bg-cyan-500/10' },
+              { role: 'Industry', name: 'Himalaya R&D', icon: '🏢', path: '/login?demo=company', color: 'hover:border-blue-500/50 hover:bg-blue-500/10' },
+              { role: 'College', name: 'Gujarat Ayurved', icon: '🏛️', path: '/login?demo=college', color: 'hover:border-purple-500/50 hover:bg-purple-500/10' },
+              { role: 'Admin', name: 'National Admin', icon: '🇮🇳', path: '/login?demo=admin', color: 'hover:border-amber-500/50 hover:bg-amber-500/10' },
+            ].map((d) => (
+              <Link
+                key={d.role}
+                to={d.path}
+                className={`p-3.5 rounded-2xl bg-slate-900/90 border border-white/10 transition-all text-left flex flex-col justify-between ${d.color}`}
+              >
+                <div className="text-xl mb-1">{d.icon}</div>
+                <div>
+                  <div className="text-xs font-bold text-white">{d.role}</div>
+                  <div className="text-[10px] text-slate-400 truncate">{d.name}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="pt-4 flex items-center justify-center gap-4">
             <Link
               to="/register"
-              className="btn-accent px-8 py-3.5 text-sm font-bold rounded-xl flex items-center gap-2 shadow-xl shadow-amber-500/20"
+              className="btn-accent px-6 py-3 text-xs font-bold rounded-xl flex items-center gap-2 shadow-xl shadow-amber-500/20"
             >
-              <span>Create Account Free</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Register New Account</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
             <Link
               to="/login"
-              className="btn-ghost-white px-6 py-3.5 text-sm font-semibold rounded-xl"
+              className="btn-ghost-white px-5 py-3 text-xs font-semibold rounded-xl"
             >
-              Sign In to Existing Account
+              Manual Login
             </Link>
-          </div>
-
-          {/* Pre-seeded Demo notice */}
-          <div className="mt-8 pt-6 border-t border-white/10 text-xs text-slate-400">
-            <span>Evaluation credentials ready: </span>
-            <span className="text-emerald-300 font-mono">student@ayushportal.demo</span>
-            <span className="mx-2">·</span>
-            <span className="text-amber-300 font-mono">company@ayushportal.demo</span>
-            <span className="mx-2">·</span>
-            <span className="text-purple-300 font-mono">college@ayushportal.demo</span>
-            <span className="block mt-1 text-slate-500">All passwords: Demo@1234</span>
           </div>
         </div>
       </section>
 
       {/* ── Footer ─────────────────────────────────────────────────── */}
-      <footer className="bg-slate-950 border-t border-white/10 py-10 text-slate-400 text-xs">
+      <footer className="bg-slate-950 border-t border-white/10 py-8 text-slate-500 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-slate-300">
-            <span className="font-display font-bold text-white">Ayush Portal</span>
+          <div className="flex items-center gap-2 text-slate-400">
+            <span className="font-display font-bold text-white">Yuktha</span>
             <span>·</span>
-            <span>Problem SIH26044</span>
+            <span>SIH26044 Academia–Industry Collaboration</span>
             <span>·</span>
             <span>Smart India Hackathon 2026</span>
           </div>

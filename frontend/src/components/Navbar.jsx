@@ -83,6 +83,22 @@ const roleBadges = {
   ADMIN: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
 }
 
+const roleActiveClasses = {
+  STUDENT: 'bg-emerald-600 text-white shadow-md shadow-emerald-950/60',
+  FACULTY: 'bg-cyan-600 text-white shadow-md shadow-cyan-950/60',
+  COMPANY: 'bg-blue-600 text-white shadow-md shadow-blue-950/60',
+  COLLEGE: 'bg-purple-600 text-white shadow-md shadow-purple-950/60',
+  ADMIN: 'bg-amber-600 text-white shadow-md shadow-amber-950/60',
+}
+
+const demoPersonas = [
+  { role: 'STUDENT', email: 'student@ayushportal.demo', name: 'Priya Sharma', title: '🎓 Student (Priya Sharma)', badge: 'Student', accent: 'text-emerald-400', hover: 'hover:bg-emerald-500/20' },
+  { role: 'FACULTY', email: 'faculty@ayushportal.demo', name: 'Dr. Rajeshwari', title: '🔬 Academician (Dr. Rajeshwari)', badge: 'Faculty', accent: 'text-cyan-400', hover: 'hover:bg-cyan-500/20' },
+  { role: 'COMPANY', email: 'company@ayushportal.demo', name: 'Himalaya R&D', title: '🏢 Industry (Himalaya R&D)', badge: 'Company', accent: 'text-blue-400', hover: 'hover:bg-blue-500/20' },
+  { role: 'COLLEGE', email: 'college@ayushportal.demo', name: 'Gujarat Ayurved', title: '🏛️ Institution (Gujarat Ayurved)', badge: 'College', accent: 'text-purple-400', hover: 'hover:bg-purple-500/20' },
+  { role: 'ADMIN', email: 'admin@ayushportal.demo', name: 'National Admin', title: '🇮🇳 National Ministry Admin', badge: 'Admin', accent: 'text-amber-400', hover: 'hover:bg-amber-500/20' },
+]
+
 export default function Navbar() {
   const { user, logout, login } = useAuth()
   const navigate = useNavigate()
@@ -123,7 +139,9 @@ export default function Navbar() {
             <Link to={user ? '/dashboard' : '/'} className="flex items-center gap-3 group">
               <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 via-teal-700 to-slate-900 p-[1px] shadow-md shadow-emerald-900/40 group-hover:scale-105 transition-transform">
                 <div className="w-full h-full bg-slate-950 rounded-[11px] flex items-center justify-center overflow-hidden">
-                  <Compass className="w-5 h-5 text-amber-400 group-hover:rotate-45 transition-transform duration-300" />
+                  <span className="font-display font-black text-xl bg-gradient-to-tr from-amber-400 via-emerald-300 to-teal-200 bg-clip-text text-transparent">
+                    Y
+                  </span>
                 </div>
               </div>
 
@@ -148,13 +166,14 @@ export default function Navbar() {
                 {links.map((l) => {
                   const Icon = navIcons[l.label] || Sparkles
                   const isActive = location.pathname === l.to
+                  const activeClass = roleActiveClasses[user.role] || 'bg-emerald-600 text-white shadow-sm'
                   return (
                     <Link
                       key={l.to}
                       to={l.to}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
                         isActive
-                          ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-900/50'
+                          ? activeClass
                           : 'text-slate-300 hover:text-white hover:bg-white/10'
                       }`}
                     >
@@ -181,46 +200,39 @@ export default function Navbar() {
                 </button>
 
                 {demoOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-slate-900 rounded-xl border border-slate-700 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2">
-                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2 py-1">
-                      Instant Persona Login
+                  <div className="absolute right-0 mt-2 w-72 bg-slate-900/95 backdrop-blur-2xl rounded-2xl border border-white/15 shadow-2xl p-2.5 z-50 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-center justify-between px-2 py-1 mb-1 border-b border-white/10">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        Instant Persona Switcher
+                      </span>
+                      <span className="text-[9px] text-emerald-400 font-semibold">1-Click Live</span>
                     </div>
-                    <div className="space-y-1 mt-1">
-                      <button
-                        onClick={() => handleQuickDemo('student@ayushportal.demo')}
-                        className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-emerald-500/20 hover:text-emerald-300 flex items-center justify-between"
-                      >
-                        <span>🎓 Student (Priya Sharma)</span>
-                        <span className="text-[10px] text-emerald-400">Student</span>
-                      </button>
-                      <button
-                        onClick={() => handleQuickDemo('faculty@ayushportal.demo')}
-                        className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-cyan-500/20 hover:text-cyan-300 flex items-center justify-between"
-                      >
-                        <span>🔬 Academician (Dr. Rajeshwari)</span>
-                        <span className="text-[10px] text-cyan-400">Faculty</span>
-                      </button>
-                      <button
-                        onClick={() => handleQuickDemo('company@ayushportal.demo')}
-                        className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-blue-500/20 hover:text-blue-300 flex items-center justify-between"
-                      >
-                        <span>🏢 Industry (Himalaya R&D)</span>
-                        <span className="text-[10px] text-blue-400">Company</span>
-                      </button>
-                      <button
-                        onClick={() => handleQuickDemo('college@ayushportal.demo')}
-                        className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-purple-500/20 hover:text-purple-300 flex items-center justify-between"
-                      >
-                        <span>🏛️ Institution (Gujarat Ayurved)</span>
-                        <span className="text-[10px] text-purple-400">College</span>
-                      </button>
-                      <button
-                        onClick={() => handleQuickDemo('admin@ayushportal.demo')}
-                        className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-200 hover:bg-amber-500/20 hover:text-amber-300 flex items-center justify-between"
-                      >
-                        <span>🇮🇳 National Ministry Admin</span>
-                        <span className="text-[10px] text-amber-400">Admin</span>
-                      </button>
+
+                    <div className="space-y-1">
+                      {demoPersonas.map((p) => {
+                        const isCurrent = user?.email === p.email
+                        return (
+                          <button
+                            key={p.email}
+                            onClick={() => handleQuickDemo(p.email)}
+                            className={`w-full text-left px-2.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center justify-between cursor-pointer ${
+                              isCurrent
+                                ? 'bg-white/10 text-white border border-white/20'
+                                : `text-slate-300 ${p.hover} hover:text-white`
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span>{p.title}</span>
+                              {isCurrent && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              )}
+                            </div>
+                            <span className={`text-[9px] font-bold uppercase px-1.5 py-0.5 rounded ${p.accent} bg-white/5`}>
+                              {isCurrent ? 'ACTIVE' : p.badge}
+                            </span>
+                          </button>
+                        )
+                      })}
                     </div>
                   </div>
                 )}
