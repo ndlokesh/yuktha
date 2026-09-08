@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import toast from 'react-hot-toast'
 import {
@@ -21,10 +21,18 @@ import {
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [form, setForm] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    const demoRole = searchParams.get('demo')
+    if (demoRole && ['student', 'faculty', 'company', 'college', 'admin'].includes(demoRole.toLowerCase())) {
+      fillDemo(demoRole.toLowerCase())
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
