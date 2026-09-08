@@ -22,8 +22,19 @@ const PORT = process.env.PORT || 5000;
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
+const allowedOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(',').map((u) => u.trim())
+  : ['http://localhost:5173', 'http://localhost:5000'];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, or same-origin)
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    // Permissive fallback during hackathon evaluation
+    return callback(null, true);
+  },
   credentials: true,
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -55,6 +66,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// ─── Serve Frontend Static in Production ──────────────────────────────────────
+
+const frontendDist = path.join(__dirname, '..', '..', 'frontend', 'dist');
+const fs = require('fs');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) return next();
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 // ─── Global error handler ─────────────────────────────────────────────────────
 
 app.use((err, req, res, next) => {
@@ -65,7 +88,7 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Ayush Portal API running on http://localhost:${PORT}`);
+  console.log(`🚀 Ayush Portal API running on port ${PORT}`);
   console.log(`   Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 

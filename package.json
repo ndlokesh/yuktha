@@ -1,0 +1,22 @@
+{
+  "name": "yuktha-platform",
+  "version": "1.0.0",
+  "description": "Yuktha - Unified Academia-Industry Collaboration & Skill Intelligence Platform (SIH26044)",
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "render-build": "cd frontend && npm install && npm run build && cd ../backend && npm install && npx prisma generate && npx prisma db push",
+    "start": "node backend/src/index.js",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev"
+  },
+  "keywords": [
+    "ayush",
+    "collaboration",
+    "skill-assessment",
+    "internship",
+    "faculty-immersion",
+    "sih26044"
+  ],
+  "author": "Yuktha Team",
+  "license": "ISC"
+}
