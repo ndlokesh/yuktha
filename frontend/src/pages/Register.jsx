@@ -45,6 +45,9 @@ export default function Register() {
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const [emailTouched, setEmailTouched] = useState(false)
+  const [passwordTouched, setPasswordTouched] = useState(false)
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -58,19 +61,56 @@ export default function Register() {
     companyName: '',
     sector: '',
     collegeName: '',
+    website_hp: '',
   })
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
 
+  const isEmailValid = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+  }
+
+  const isPasswordStrong = (pwd) => {
+    return pwd.length >= 8 && /[A-Za-z]/.test(pwd) && /[0-9]/.test(pwd)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
-    if (form.password !== form.confirm) {
-      setError('Passwords do not match')
+
+    // Spam/bot protection: honeypot check
+    if (form.website_hp) {
+      console.warn('Bot submission blocked.')
       return
     }
-    if (form.password.length < 6) {
-      setError('Password must be at least 6 characters')
+
+    if (!form.name.trim()) {
+      setError('Full Name or Organization Name is required.')
+      return
+    }
+
+    if (!isEmailValid(form.email)) {
+      setError('Please provide a valid institutional or personal email address.')
+      return
+    }
+
+    if (form.password !== form.confirm) {
+      setError('Passwords do not match. Please verify both fields.')
+      return
+    }
+
+    if (form.password.length < 8) {
+      setError('Password must be at least 8 characters long for security.')
+      return
+    }
+
+    if (!isPasswordStrong(form.password)) {
+      setError('Password must contain both letters and at least one number.')
+      return
+    }
+
+    if (!agreedToTerms) {
+      setError('You must agree to the Terms & Conditions and Privacy Policy to proceed.')
       return
     }
 
@@ -233,50 +273,79 @@ export default function Register() {
                 </div>
               </div>
               <div>
-                <label className="label">Official Email *</label>
+                <label className="label text-slate-700">Official Email *</label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
-                    className="input pl-10"
+                    className={`input pl-10 ${
+                      emailTouched && form.email && !isEmailValid(form.email) ? 'input-error' : ''
+                    }`}
                     type="email"
                     required
                     value={form.email}
+                    onBlur={() => setEmailTouched(true)}
                     onChange={set('email')}
                     placeholder="name@domain.edu.in"
+                    aria-invalid={emailTouched && form.email && !isEmailValid(form.email)}
                   />
                 </div>
+                {emailTouched && form.email && !isEmailValid(form.email) && (
+                  <p className="text-[11px] text-red-600 mt-1">Please enter a valid email address.</p>
+                )}
               </div>
+            </div>
+
+            {/* Honeypot anti-spam field */}
+            <div style={{ display: 'none', position: 'absolute', left: '-9999px' }} aria-hidden="true">
+              <label htmlFor="reg_website_hp">Leave empty</label>
+              <input
+                id="reg_website_hp"
+                type="text"
+                tabIndex="-1"
+                autoComplete="off"
+                value={form.website_hp}
+                onChange={(e) => setForm({ ...form, website_hp: e.target.value })}
+              />
             </div>
 
             {/* Passwords */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="label">Password (Min 6 chars) *</label>
+                <label className="label text-slate-700">Password (Min 8 chars, letters &amp; numbers) *</label>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
-                    className="input pl-10 pr-10"
+                    className={`input pl-10 pr-10 ${
+                      passwordTouched && form.password && !isPasswordStrong(form.password) ? 'input-error' : ''
+                    }`}
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={form.password}
+                    onBlur={() => setPasswordTouched(true)}
                     onChange={set('password')}
-                    placeholder="Create a strong password"
+                    placeholder="At least 8 chars with number"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
+                {passwordTouched && form.password && !isPasswordStrong(form.password) && (
+                  <p className="text-[11px] text-red-600 mt-1">Must be at least 8 chars with letters &amp; a number.</p>
+                )}
               </div>
               <div>
-                <label className="label">Confirm Password *</label>
+                <label className="label text-slate-700">Confirm Password *</label>
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
-                    className="input pl-10"
+                    className={`input pl-10 ${
+                      form.confirm && form.password !== form.confirm ? 'input-error' : ''
+                    }`}
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={form.confirm}
@@ -284,6 +353,9 @@ export default function Register() {
                     placeholder="Re-enter password"
                   />
                 </div>
+                {form.confirm && form.password !== form.confirm && (
+                  <p className="text-[11px] text-red-600 mt-1">Passwords do not match.</p>
+                )}
               </div>
             </div>
 
@@ -537,11 +609,35 @@ export default function Register() {
               </div>
             )}
 
+            {/* Terms and Privacy Consent Checkbox */}
+            <div className="pt-2">
+              <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  required
+                  checked={agreedToTerms}
+                  onChange={(e) => setAgreedToTerms(e.target.checked)}
+                  className="mt-1 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                />
+                <span className="text-xs text-slate-600 leading-normal">
+                  I agree to the{' '}
+                  <Link to="/terms" target="_blank" className="text-emerald-700 font-bold hover:underline">
+                    Terms &amp; Conditions
+                  </Link>
+                  {' '}and{' '}
+                  <Link to="/privacy" target="_blank" className="text-emerald-700 font-bold hover:underline">
+                    Privacy Policy
+                  </Link>
+                  {' '}governing verified Ayush academic and enterprise data governance.
+                </span>
+              </label>
+            </div>
+
             {/* Action Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-3.5 text-base font-semibold shadow-lg shadow-emerald-900/25 hover:shadow-xl hover:shadow-emerald-900/35 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer mt-6"
+              className="btn-primary w-full py-3.5 text-base font-semibold shadow-lg shadow-emerald-950/25 hover:shadow-xl hover:shadow-emerald-950/35 hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer mt-6"
             >
               {loading ? (
                 <span className="flex items-center gap-2">

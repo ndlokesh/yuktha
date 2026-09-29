@@ -9,10 +9,25 @@ const prisma = new PrismaClient();
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
+    // Spam/bot honeypot check
+    if (req.body.website_hp) {
+      return res.status(400).json({ error: 'Automated submission detected.' });
+    }
+
     const { name, email, password, role, institution, companyName, sector, collegeName, city, state } = req.body;
 
     if (!name || !email || !password || !role) {
       return res.status(400).json({ error: 'Name, email, password and role are required' });
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      return res.status(400).json({ error: 'Please provide a valid email address.' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
     }
 
     const validRoles = ['STUDENT', 'FACULTY', 'COMPANY', 'COLLEGE'];
@@ -20,8 +35,10 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Invalid role. Must be STUDENT, FACULTY, COMPANY or COLLEGE' });
     }
 
-    const existing = await prisma.user.findUnique({ where: { email } });
-    if (existing) return res.status(409).json({ error: 'Email already registered' });
+    const existing = await prisma.user.findFirst({
+      where: { email: { equals: cleanEmail } },
+    });
+    if (existing) return res.status(409).json({ error: 'Email already registered. Please sign in instead.' });
 
     const hashed = await bcrypt.hash(password, 10);
 
@@ -109,6 +126,10 @@ router.post('/register', async (req, res) => {
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
+    if (req.body.website_hp) {
+      return res.status(400).json({ error: 'Automated submission detected.' });
+    }
+
     const { email, password } = req.body;
 
     if (!email || !password) {

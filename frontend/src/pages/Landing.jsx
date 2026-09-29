@@ -2,8 +2,10 @@ import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
 import Hero3DCanvas from '../components/Hero3DCanvas'
 import { SkillTag } from '../components/Badges'
+import { trackEvent } from '../utils/analytics'
 import {
   Sparkles,
   ArrowRight,
@@ -296,22 +298,23 @@ export default function Landing() {
                 and pharmaceutical enterprises with job-ready Ayush talent.
               </p>
 
-              {/* Clear, Professional CTAs */}
+              {/* Single Unmistakable Call To Action */}
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
                 <Link
                   to="/register"
-                  className="btn-accent px-6 py-3.5 text-sm font-bold rounded-xl flex items-center gap-2 shadow-xl shadow-amber-500/20 hover:scale-[1.02] active:scale-95 transition-all"
+                  onClick={() => trackEvent('Landing', 'Click Hero Primary CTA', 'Get Started Now')}
+                  className="px-8 py-4 text-base font-extrabold rounded-2xl flex items-center gap-3 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 shadow-2xl shadow-amber-500/30 hover:scale-[1.03] active:scale-[0.98] ring-4 ring-amber-400/30 transition-all cursor-pointer group"
                 >
-                  <span>Explore Platform</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span>Get Started Free — Register Now</span>
+                  <ArrowRight className="w-5 h-5 text-slate-950 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 <a
-                  href="#taxonomy"
-                  className="btn-ghost-white px-5 py-3.5 text-sm font-semibold rounded-xl flex items-center gap-2 border border-white/15 hover:border-emerald-500/40"
+                  href="#skills"
+                  className="btn-ghost-white px-5 py-4 text-sm font-semibold rounded-2xl flex items-center gap-2 border border-white/15 hover:border-emerald-500/40 text-slate-300 hover:text-white"
                 >
                   <Search className="w-4 h-4 text-emerald-400" />
-                  <span>View Skill Taxonomy</span>
+                  <span>Explore Skills Taxonomy</span>
                 </a>
               </div>
 
@@ -400,7 +403,7 @@ export default function Landing() {
       </section>
 
       {/* ── 3. Four Core Ecosystem Pillars ──────────────────────────── */}
-      <section className="py-24 relative overflow-hidden">
+      <section id="stakeholders" className="py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold tracking-wide uppercase mb-3">
@@ -467,7 +470,7 @@ export default function Landing() {
       </section>
 
       {/* ── 4. Objective Skill Gap & Competency Radar ────────────────── */}
-      <section className="py-24 bg-gradient-to-b from-slate-950 via-[#051c14] to-slate-950 border-t border-white/10 relative overflow-hidden">
+      <section id="radar-benchmark" className="py-24 bg-gradient-to-b from-slate-950 via-[#051c14] to-slate-950 border-t border-white/10 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Narrative */}
@@ -610,7 +613,7 @@ export default function Landing() {
       </section>
 
       {/* ── 5. Standardized 46+ Competency Taxonomy (Neat & Clean) ───── */}
-      <section id="taxonomy" className="py-24 relative overflow-hidden">
+      <section id="skills" className="py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold tracking-wide uppercase mb-3">
@@ -685,7 +688,7 @@ export default function Landing() {
       </section>
 
       {/* ── 6. 4-Stage Collaboration Architecture ───────────────────── */}
-      <section className="py-24 bg-gradient-to-b from-slate-900/40 to-slate-950 border-y border-white/10">
+      <section id="workflow" className="py-24 bg-gradient-to-b from-slate-900/40 to-slate-950 border-y border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight">
@@ -783,33 +786,7 @@ export default function Landing() {
       </section>
 
       {/* ── 8. Official Footer ──────────────────────────────────────── */}
-      <footer className="bg-slate-950 border-t border-white/10 py-10 text-slate-500 text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-white/5">
-            <div className="flex items-center gap-2 text-slate-300">
-              <span className="font-display font-extrabold text-white text-base tracking-tight">Yuktha</span>
-              <span>·</span>
-              <span className="text-emerald-400 font-semibold">Unified Academia–Industry Collaboration Portal</span>
-            </div>
-            <div className="flex flex-wrap gap-4 text-slate-400 text-[11px]">
-              <Link to="/register?role=STUDENT" className="hover:text-white">Students</Link>
-              <Link to="/register?role=FACULTY" className="hover:text-white">Academicians</Link>
-              <Link to="/register?role=COMPANY" className="hover:text-white">Enterprises</Link>
-              <Link to="/register?role=COLLEGE" className="hover:text-white">Institutions</Link>
-              <Link to="/login" className="hover:text-white">Sign In</Link>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
-            <div>
-              Smart India Hackathon 2026 · Problem Statement SIH26044 · Ministry of Ayush, Government of India
-            </div>
-            <div className="text-slate-500">
-              Developed for National Ayush Innovation & Skill Integration.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

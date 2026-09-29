@@ -1,0 +1,22 @@
+# Robots.txt for Yuktha - Unified Academia-Industry Collaboration & Skill Intelligence Platform
+# Problem Statement: SIH26044 · Ministry of Ayush, Government of India
+
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /register
+Allow: /privacy
+Allow: /terms
+Allow: /portfolio/
+
+# Disallow authenticated private dashboard pathways & API
+Disallow: /api/
+Disallow: /student/
+Disallow: /faculty/
+Disallow: /company/
+Disallow: /college/
+Disallow: /admin/
+Disallow: /dashboard
+
+# XML Sitemap location
+Sitemap: https://yuktha.gov.in/sitemap.xml

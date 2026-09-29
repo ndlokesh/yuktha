@@ -19,8 +19,9 @@ import {
   BookOpen,
   FolderGit2,
   Handshake,
-  ChevronDown,
   Compass,
+  ArrowRight,
+  ShieldCheck,
 } from 'lucide-react'
 
 const navIcons = {
@@ -91,38 +92,15 @@ const roleActiveClasses = {
   ADMIN: 'bg-amber-600 text-white shadow-md shadow-amber-950/60',
 }
 
-const demoPersonas = [
-  { role: 'STUDENT', email: 'student@ayushportal.demo', name: 'Priya Sharma', title: '🎓 Student (Priya Sharma)', badge: 'Student', accent: 'text-emerald-400', hover: 'hover:bg-emerald-500/20' },
-  { role: 'FACULTY', email: 'faculty@ayushportal.demo', name: 'Dr. Rajeshwari', title: '🔬 Academician (Dr. Rajeshwari)', badge: 'Faculty', accent: 'text-cyan-400', hover: 'hover:bg-cyan-500/20' },
-  { role: 'COMPANY', email: 'company@ayushportal.demo', name: 'Himalaya R&D', title: '🏢 Industry (Himalaya R&D)', badge: 'Company', accent: 'text-blue-400', hover: 'hover:bg-blue-500/20' },
-  { role: 'COLLEGE', email: 'college@ayushportal.demo', name: 'Gujarat Ayurved', title: '🏛️ Institution (Gujarat Ayurved)', badge: 'College', accent: 'text-purple-400', hover: 'hover:bg-purple-500/20' },
-  { role: 'ADMIN', email: 'admin@ayushportal.demo', name: 'National Admin', title: '🇮🇳 National Ministry Admin', badge: 'Admin', accent: 'text-amber-400', hover: 'hover:bg-amber-500/20' },
-]
-
 export default function Navbar() {
-  const { user, logout, login } = useAuth()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [demoOpen, setDemoOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
     navigate('/')
-  }
-
-  const handleQuickDemo = async (email) => {
-    try {
-      await login(email, 'Demo@1234')
-      setDemoOpen(false)
-      if (email.includes('student')) navigate('/student/dashboard')
-      else if (email.includes('faculty')) navigate('/faculty/dashboard')
-      else if (email.includes('company')) navigate('/company/dashboard')
-      else if (email.includes('college')) navigate('/college/dashboard')
-      else if (email.includes('admin')) navigate('/admin/analytics')
-    } catch (err) {
-      console.error('Demo login error:', err)
-    }
   }
 
   const links = user ? navLinks[user.role] || [] : []
@@ -154,14 +132,14 @@ export default function Navbar() {
                     Academia–Industry
                   </span>
                 </div>
-                <div className="text-[10px] tracking-wide text-slate-400 font-medium leading-none mt-0.5">
-                  Unified Collaboration & Skill Intelligence
+                <div className="text-[10px] tracking-wide text-slate-300 font-medium leading-none mt-0.5">
+                  Unified Collaboration &amp; Skill Intelligence
                 </div>
               </div>
             </Link>
 
             {/* Desktop Navigation Links */}
-            {user && (
+            {user ? (
               <div className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
                 {links.map((l) => {
                   const Icon = navIcons[l.label] || Sparkles
@@ -183,12 +161,25 @@ export default function Navbar() {
                   )
                 })}
               </div>
+            ) : (
+              <div className="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-300">
+                <Link to="/#skills" className="hover:text-emerald-400 transition-colors">
+                  Skills Taxonomy
+                </Link>
+                <Link to="/#radar-benchmark" className="hover:text-emerald-400 transition-colors">
+                  Radar Benchmark
+                </Link>
+                <Link to="/#workflow" className="hover:text-emerald-400 transition-colors">
+                  Workflow
+                </Link>
+                <Link to="/#stakeholders" className="hover:text-emerald-400 transition-colors">
+                  Stakeholders
+                </Link>
+              </div>
             )}
 
             {/* Right Action / Profile & Sign In */}
-            <div className="flex items-center gap-2.5">
-
-
+            <div className="flex items-center gap-3">
               {user ? (
                 <>
                   <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-white/10">
@@ -216,20 +207,22 @@ export default function Navbar() {
                   </button>
                 </>
               ) : (
-                <div className="hidden sm:flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-3">
                   <Link
                     to="/login"
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/10"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/10 transition-all border border-white/10"
                   >
                     <LogIn className="w-3.5 h-3.5 text-emerald-400" />
                     <span>Sign In</span>
                   </Link>
+
+                  {/* Single High-Priority Call To Action */}
                   <Link
                     to="/register"
-                    className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 hover:from-amber-400 hover:to-amber-500 shadow-md shadow-amber-500/20 transition-all"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 hover:brightness-105 shadow-md shadow-amber-500/25 ring-2 ring-amber-400/40 transition-all hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <UserPlus className="w-3.5 h-3.5" />
-                    <span>Register</span>
+                    <span>Get Started Free</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-950" />
                   </Link>
                 </div>
               )}
@@ -249,41 +242,88 @@ export default function Navbar() {
         {/* Mobile Dropdown Menu */}
         {menuOpen && (
           <div className="lg:hidden border-t border-white/10 bg-slate-950 px-4 py-4 space-y-2">
-            {links.map((l) => {
-              const Icon = navIcons[l.label] || Sparkles
-              const isActive = location.pathname === l.to
-              return (
+            {user ? (
+              links.map((l) => {
+                const Icon = navIcons[l.label] || Sparkles
+                const isActive = location.pathname === l.to
+                return (
+                  <Link
+                    key={l.to}
+                    to={l.to}
+                    onClick={() => setMenuOpen(false)}
+                    className={`flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-all ${
+                      isActive ? 'bg-emerald-600 text-white' : 'text-slate-300 hover:bg-white/10'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{l.label}</span>
+                  </Link>
+                )
+              })
+            ) : (
+              <div className="space-y-1 pb-2">
                 <Link
-                  key={l.to}
-                  to={l.to}
+                  to="/#skills"
                   onClick={() => setMenuOpen(false)}
-                  className={`flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-all ${
-                    isActive ? 'bg-emerald-600 text-white' : 'text-slate-300 hover:bg-white/10'
-                  }`}
+                  className="block px-3.5 py-2 rounded-xl text-xs text-slate-300 hover:bg-white/10 hover:text-white"
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{l.label}</span>
+                  Skills Taxonomy
                 </Link>
-              )
-            })}
+                <Link
+                  to="/#radar-benchmark"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-3.5 py-2 rounded-xl text-xs text-slate-300 hover:bg-white/10 hover:text-white"
+                >
+                  Radar Benchmark
+                </Link>
+                <Link
+                  to="/#workflow"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-3.5 py-2 rounded-xl text-xs text-slate-300 hover:bg-white/10 hover:text-white"
+                >
+                  Immersion Workflow
+                </Link>
+                <Link
+                  to="/#stakeholders"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-3.5 py-2 rounded-xl text-xs text-slate-300 hover:bg-white/10 hover:text-white"
+                >
+                  Stakeholders
+                </Link>
+                <Link
+                  to="/privacy"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:bg-white/10 hover:text-white"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  to="/terms"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:bg-white/10 hover:text-white"
+                >
+                  Terms &amp; Conditions
+                </Link>
+              </div>
+            )}
 
             {!user ? (
               <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
                 <Link
-                  to="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white"
-                >
-                  <LogIn className="w-4 h-4" />
-                  <span>Sign In</span>
-                </Link>
-                <Link
                   to="/register"
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold bg-amber-500 text-slate-950"
+                  className="flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
                 >
-                  <UserPlus className="w-4 h-4" />
-                  <span>Register</span>
+                  <span>Get Started Free</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-semibold bg-white/10 text-white border border-white/10"
+                >
+                  <LogIn className="w-4 h-4 text-emerald-400" />
+                  <span>Sign In</span>
                 </Link>
               </div>
             ) : (
