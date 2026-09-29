@@ -116,14 +116,9 @@ export default function Register() {
 
     setLoading(true)
     try {
-      const data = await register({ ...form, role })
-      if (role === 'STUDENT' && !data.user?.isActive) {
-        toast.success('Registration successful! Awaiting college verification.', { duration: 5000 })
-        navigate('/login')
-      } else {
-        toast.success('Account created successfully!')
-        navigate('/dashboard')
-      }
+      await register({ ...form, role })
+      toast.success('Account created successfully! Welcome to Yuktha.')
+      navigate('/dashboard')
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed. Please check your inputs.')
     } finally {
@@ -434,13 +429,6 @@ export default function Register() {
                     </div>
                   </div>
                 </div>
-
-                <div className="p-3.5 bg-amber-50/80 border border-amber-200/80 rounded-2xl flex items-start gap-3 text-xs text-amber-900">
-                  <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold">Institutional Verification Protocol:</span> Student accounts are verified by your college placement authority before full job applications go live.
-                  </div>
-                </div>
               </div>
             )}
 
@@ -663,7 +651,7 @@ export default function Register() {
             </div>
             <div className="inline-flex items-center gap-1.5 text-slate-400">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>Encrypted & Verified</span>
+              <span>Encrypted &amp; Verified</span>
             </div>
           </div>
         </div>
