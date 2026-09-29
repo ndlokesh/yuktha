@@ -10,8 +10,9 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js",
+    "db:seed-jobs": "node prisma/seed_jobs.js",
     "db:studio": "prisma studio",
-    "setup": "npm install && prisma generate && prisma db push && node prisma/seed.js"
+    "setup": "npm install && prisma generate && prisma db push && node prisma/seed.js && node prisma/seed_jobs.js"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
