@@ -18,7 +18,7 @@ model User {
   email     String   @unique
   password  String
   role      String   @default("STUDENT") // STUDENT | FACULTY | COMPANY | COLLEGE | ADMIN
-  isActive  Boolean  @default(false) // colleges must verify students and faculty
+  isActive  Boolean  @default(true)  // all users are active immediately upon registration
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -254,7 +254,7 @@ model CollaborationOpportunity {
   domain          String   // Pharmacology, AI/ML, Bioprocessing, Data Systems, etc.
   description     String
   requirements    String
-  budgetOrStipend String?  // e.g. ₹50,000 grant, ₹30,000/mo stipend
+  budgetOrStipend String?  // e.g. Rs.50,000 grant, Rs.30,000/mo stipend
   duration        String   // e.g. 6 Months, 2 Weeks
   location        String   @default("Hybrid")
   deadline        DateTime

@@ -42,8 +42,8 @@ router.post('/register', async (req, res) => {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    // Students and Faculty need verification by college/admin, companies/colleges are active by default
-    const isActive = role !== 'STUDENT';
+    // All roles are active immediately — no institution verification required
+    const isActive = true;
 
     let userData = {
       name,
@@ -111,9 +111,7 @@ router.post('/register', async (req, res) => {
     const { password: _, ...userWithoutPassword } = user;
 
     res.status(201).json({
-      message: role === 'STUDENT'
-        ? 'Registration successful. Your account is pending verification by your institution.'
-        : 'Registration successful.',
+      message: 'Registration successful.',
       user: userWithoutPassword,
       token,
     });
@@ -162,7 +160,7 @@ router.post('/login', async (req, res) => {
 
     if (!user.isActive) {
       return res.status(403).json({
-        error: 'Account pending verification. Please wait for your institution to approve your registration.',
+        error: 'Your account has been deactivated. Please contact support.',
       });
     }
 
